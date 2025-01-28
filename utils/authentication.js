@@ -39,6 +39,7 @@ exports.createSendAccessRefresh = async (user, statusCode, res) => {
   await user.save();
   // 5) ALLOW ACCESS FOR THE USER BY GIVING ACCESS TOKEN TO HIM
   user.password = undefined;
+  user.refreshToken = undefined;
 
   res.status(statusCode).json({
     status: "success",
