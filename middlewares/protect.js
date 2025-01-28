@@ -14,7 +14,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // If token doesn't exist, return an error response
   if (!token) {
-    return next(new AppError("There is no access token", 401)); // Immediately return, do not call next() further
+    return next(new AppError("There is no access token, please log in", 401)); // Immediately return, do not call next() further
   }
 
   // Verify the token

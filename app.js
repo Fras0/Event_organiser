@@ -11,6 +11,7 @@ app.use(cors("*"));
 
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const eventRoutes = require("./routes/event.routes");
 const notificationRoutes = require("./routes/notification.routes");
 
 // MIDDLEWARES
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/authentication", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/events", eventRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
