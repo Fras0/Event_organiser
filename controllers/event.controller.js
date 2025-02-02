@@ -70,3 +70,23 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+// ######################################### SUBSCRIBE TO EVENT #########################################
+exports.subscribeToEvent = catchAsync(async (req, res, next) => {
+  // 1) CHECK IF THE EVENT WITH REQ.PARAMS.ID EXISTS
+  const event = await Event.findById(req.params.id);
+  if (!event) {
+    return next(new AppError("There is no event with that id", 404));
+  }
+  // 2) CHECK IF THE USER IS ALREADY A VOLUNTEER IN THIS EVENT
+  if (event.volunteers.includes(req.user._id)) {
+    return next(new AppError("You are already a volunteer in this event", 400));
+  }
+  // 3) ADD THE USER ID (REQ.USER) IN THE VOLUNTEERS FOR THIS SPECIFIC EVENT
+  event.volunteers.push(req.user._id);
+  await event.save();
+  return res.status(200).json({
+    status: "success",
+    data: event,
+  });
+});

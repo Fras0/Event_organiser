@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { createEvenNotification } = require("../services/notifications");
+const { createEventNotification } = require("../services/notifications");
 
 const eventSchema = new mongoose.Schema(
   {
@@ -7,6 +7,7 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: [true, "Event must has a name"],
       trim: true,
+      unique: true,
     },
     description: {
       type: String,
@@ -25,6 +26,7 @@ const eventSchema = new mongoose.Schema(
     dateTime: {
       type: Date,
       required: [true, "The event must has a date"],
+      default: Date.now() + 10 * 60 * 1000,
     },
     minVolunteerRequired: {
       type: Number,
@@ -50,7 +52,12 @@ const eventSchema = new mongoose.Schema(
 eventSchema.index({ location: "2dsphere" });
 
 // HANDLING NOTIFICATIONS AFTER CREATING AN EVENT
-eventSchema.post("save", createEvenNotification);
+eventSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    await createEventNotification(this);
+  }
+  next();
+});
 
 const Event = mongoose.model("Event", eventSchema);
 
