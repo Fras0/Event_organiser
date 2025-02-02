@@ -25,11 +25,15 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "candidate", "user"],
+      enum: ["admin", "volunteer", "user"],
       required: true,
       default: "user",
     },
     refreshToken: {
+      type: String,
+      select: false,
+    },
+    fcmToken: {
       type: String,
       select: false,
     },
