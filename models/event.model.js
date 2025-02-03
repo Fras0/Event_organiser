@@ -36,13 +36,6 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "You have to provide the admin that created that event"],
     },
-    volunteers: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-        default: [],
-      },
-    ],
   },
   {
     timestamps: true,

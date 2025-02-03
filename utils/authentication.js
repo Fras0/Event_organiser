@@ -3,7 +3,7 @@ const User = require("./../models/user.model");
 
 const generateAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET_ACCESS, {
-    expiresIn: "30sec",
+    expiresIn: "1h",
   });
 };
 
@@ -31,10 +31,6 @@ exports.createSendAccessRefresh = async (user, statusCode, res) => {
   res.cookie("refreshToken", refreshToken, cookieOptions);
 
   // 4) ADD THE REFRESH TOKEN FOR THE USER IN THE DATABASE
-  //   await User.updateOne(
-  //     { _id: user._id },
-  //     { $set: { refreshToken: refreshToken } }
-  //   );
   user.refreshToken = refreshToken;
   await user.save();
   // 5) ALLOW ACCESS FOR THE USER BY GIVING ACCESS TOKEN TO HIM
