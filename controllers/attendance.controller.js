@@ -38,7 +38,8 @@ exports.getEventSubscribers = catchAsync(async (req, res, next) => {
   // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS EVENT
   const eventId = req.params.eventId;
   const subscriptions = await Attendance.find({ event: eventId })
-    .populate("user", "_id name email phone")
+    // .populate("user", "_id name email phone")
+    .populate("user", "-__v -createdAt -updatedAt ")
     .select("-__v -_id -event")
     .exec();
   if (!subscriptions.length) {
@@ -55,7 +56,7 @@ exports.getUserEvents = catchAsync(async (req, res, next) => {
   // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS USER
   const userId = req.params.userId;
   const subscriptions = await Attendance.find({ user: userId })
-    .populate("event", "-__v -createdAt -updatedAt -admin ")
+    .populate("event", "-__v -createdAt -updatedAt ")
     .select("-__v -_id -user")
     .exec();
   if (!subscriptions.length) {
