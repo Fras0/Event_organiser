@@ -15,7 +15,7 @@ router.use(protect);
 
 router.route("/myProfile").get(getMe, getUser);
 router.route("/:userId").get(getUser);
-router.route("/deleteMe").get(deleteMe);
+router.route("/deleteMe").delete(deleteMe);
 
 router.use(restrictTo("admin"));
 router.route("/").get(getAllUsers);
