@@ -29,6 +29,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "user",
     },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
     refreshToken: {
       type: String,
       select: false,
@@ -37,11 +46,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
+    emailVerificationToken: {
+      type: String,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
