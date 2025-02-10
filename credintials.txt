@@ -1,8 +1,0 @@
-kodam75973@kurbieh.com
-
-Supabase11@11
-
-database_pwd = pEsfbgMp05irmz3u
-
-
-#####################################
