@@ -14,6 +14,8 @@ const userRoutes = require("./routes/user.routes");
 const eventRoutes = require("./routes/event.routes");
 const attendanceRoutes = require("./routes/attendance.routes");
 
+require("./jobs/eventReminder");
+
 // MIDDLEWARES
 app.use(express.json());
 

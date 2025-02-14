@@ -7,16 +7,17 @@ const {
   subscribeToEvent,
   getEventSubscribers,
   getUserEvents,
+  unsubscribeToEvent,
 } = require("./../controllers/attendance.controller");
 const { getMe } = require("../controllers/user.controller");
 
 router.use(protect);
 
-router.use(restrictTo("volunteer"));
 router
   .route("/events/:eventId")
   .get(getEventSubscribers)
-  .post(subscribeToEvent);
+  .post(subscribeToEvent)
+  .delete(getMe, unsubscribeToEvent);
 router.route("/users/:userId").get(getUserEvents);
 router.route("/myEvents").get(getMe, getUserEvents);
 

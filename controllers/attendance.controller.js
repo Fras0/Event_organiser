@@ -33,6 +33,24 @@ exports.subscribeToEvent = catchAsync(async (req, res, next) => {
   });
 });
 
+// ######################################### GET EVENTS SUBSCRIBED BY USER #########################################
+exports.unsubscribeToEvent = catchAsync(async (req, res, next) => {
+  // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS USER
+  const userId = req.params.userId;
+  const subscription = await Attendance.findOneAndDelete({
+    user: userId,
+    event: req.params.eventId,
+  });
+  if (!subscription) {
+    return next(new AppError("You are not subscribed to this event", 404));
+  }
+  // 2) RETURN ALL SUBSCRIPTIONS
+  return res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
 // ######################################### GET SUBSCRIBERS FOR EVENT #########################################
 exports.getEventSubscribers = catchAsync(async (req, res, next) => {
   // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS EVENT

@@ -55,7 +55,6 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
 // ######################################### MAKE THE LOGGED IN USER IN THE PARAMETERS #########################################
 exports.getMe = (req, res, next) => {
-  console.log(req.user._id);
   req.params.userId = req.user._id;
   next();
 };
