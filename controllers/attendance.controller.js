@@ -33,7 +33,7 @@ exports.subscribeToEvent = catchAsync(async (req, res, next) => {
   });
 });
 
-// ######################################### GET EVENTS SUBSCRIBED BY USER #########################################
+// ######################################### UNSUBSCRIBE TO EVENT #########################################
 exports.unsubscribeToEvent = catchAsync(async (req, res, next) => {
   // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS USER
   const userId = req.params.userId;
@@ -44,13 +44,49 @@ exports.unsubscribeToEvent = catchAsync(async (req, res, next) => {
   if (!subscription) {
     return next(new AppError("You are not subscribed to this event", 404));
   }
-  // 2) RETURN ALL SUBSCRIPTIONS
   return res.status(204).json({
     status: "success",
     data: null,
   });
 });
+// ######################################### ATTEND EVENT #########################################
+exports.attendEvent = catchAsync(async (req, res, next) => {
+  // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS USER
+  const userId = req.params.userId;
+  const eventId = req.params.eventId;
 
+  const event = await Event.findById(eventId);
+  const now = new Date();
+  // 2) CHECK IF THE EVENT TIME HAS COME
+  if (now < event.dateTime) {
+    return next(new AppError("The event time has not come yet", 400));
+  }
+
+  // 3) CHECK IF THE EVENT IS STILL OPEN
+  if (!event.isOpen) {
+    return next(new AppError("The event has been closed", 400));
+  }
+
+  // 4) UPDATE THE EVENT WITH THE NEW VALUE
+  const subscription = await Attendance.findOneAndUpdate(
+    {
+      user: userId,
+      event: eventId,
+    },
+    { state: "attended" },
+    {
+      runValidators: true,
+    }
+  );
+  if (!subscription) {
+    return next(new AppError("You have not subscribed for this event", 400));
+  }
+
+  return res.status(204).json({
+    status: "success",
+    data: subscription,
+  });
+});
 // ######################################### GET SUBSCRIBERS FOR EVENT #########################################
 exports.getEventSubscribers = catchAsync(async (req, res, next) => {
   // 1) CHECK IF THERE IS SUBSCRIPTION FOR THIS EVENT

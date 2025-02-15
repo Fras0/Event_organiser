@@ -28,6 +28,10 @@ const eventSchema = new mongoose.Schema(
       required: [true, "The event must has a date"],
       default: Date.now() + 30 * 60 * 1000,
     },
+    isOpen: {
+      type: Boolean,
+      default: true,
+    },
     minVolunteerRequired: {
       type: Number,
     },

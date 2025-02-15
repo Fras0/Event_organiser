@@ -8,6 +8,7 @@ const {
   getEventSubscribers,
   getUserEvents,
   unsubscribeToEvent,
+  attendEvent,
 } = require("./../controllers/attendance.controller");
 const { getMe } = require("../controllers/user.controller");
 
@@ -18,6 +19,7 @@ router
   .get(getEventSubscribers)
   .post(subscribeToEvent)
   .delete(getMe, unsubscribeToEvent);
+router.route("/events/:eventId/attend").patch(getMe, attendEvent);
 router.route("/users/:userId").get(getUserEvents);
 router.route("/myEvents").get(getMe, getUserEvents);
 

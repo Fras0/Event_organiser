@@ -70,3 +70,23 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+// ######################################### CLOSE EVENT #########################################
+exports.closeEvent = catchAsync(async (req, res, next) => {
+  const event = await Event.findByIdAndUpdate(
+    req.params.id,
+    { isOpen: false },
+    {
+      runValidators: true,
+    }
+  );
+
+  if (!event) {
+    return next(new AppError("No event found with that id", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: event,
+  });
+});
